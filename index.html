@@ -1,0 +1,83 @@
+<!doctype html>
+<!--[if lt IE 7 ]> <html lang="ru" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="ru" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="ru" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="ru" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+
+  <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame 
+       Remove this if you use the .htaccess -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Rumpetroll yui3 port</title>
+  <meta name="description" content="index page">
+  <meta name="author" content="Nazar Kulyk">
+
+   <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+  <!-- Place favicon.ico and apple-touch-icon.png in the root of your domain and delete these references -->
+  <link rel="shortcut icon" href="/favicon.ico">
+  <!--  link rel="apple-touch-icon" href="/apple-touch-icon.png" -->
+
+
+  <!-- CSS : implied media="all" -->
+  <link rel="stylesheet" href="css/chat.css?v=1">
+
+  <!-- For the less-enabled mobile browsers like Opera Mini -->
+  <!-- link rel="stylesheet" media="handheld" href="css/handheld.css?v=1" -->
+
+ 
+  <!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements & feature detects -->
+  <script src="js/libs/modernizr-2.0.js"></script>
+
+</head>
+
+<body>
+  <div id="container">
+    <header>
+	</header>
+    
+    <div id="main">
+		<section id="options">
+			 <a href="#" id="pause">pause</a>
+		</section>
+		<section id="content">
+			<canvas id="canvas"></canvas>
+			<div id="ui">
+			    <input id="chat" type="text" />
+			    <div id="chatText"></div>
+			</div>
+		</section>
+    </div>
+    
+    <footer>
+    </footer>
+  </div> <!--! end of #container -->
+
+
+  <!-- Javascript at the bottom for fast page loading -->
+
+  <!-- Grab Google CDN's YUI. fall back to local if necessary -->
+  <script src="//yui.yahooapis.com/3.4.0pr1/build/yui/yui-min.js"></script>
+  <script>!window.YUI && document.write(unescape('%3Cscript src="/js/libs/yui-min.js?v=3.3.0"%3E%3C/script%3E'))</script>
+
+
+  <script src="/js/engine/app.js?v=1"></script>
+  <script src="/js/engine/model.js?v=1"></script>
+  <script src="/js/engine/tadpole.js?v=1"></script>
+  <script src="/js/engine/waterParticle.js?v=1"></script>
+  <script src="/js/engine/camera.js?v=1"></script>
+  <script src="/js/engine/keys.js?v=1"></script>
+  <script src="/js/engine/tadpoleTail.js?v=1"></script>
+  <script src="/js/engine/webSocketService.js?v=1"></script>
+  <script src="/js/engine/arrow.js?v=1"></script>
+  <script src="/js/engine/message.js?v=1"></script>
+  <script src="/js/engine/inputMessage.js?v=1"></script>
+  <script src="/js/page/index.js?v=1"></script>
+  
+</body>
+</html>

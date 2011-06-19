@@ -1,0 +1,33 @@
+/* #ui {
+	display: none;
+}*/
+
+#chatText {
+	display: inline-block;
+	position: absolute;
+	top: -100px;
+	left: 0;
+}
+
+#chatText, #chat {
+	font-size:3em;
+	font-weight: bold;
+	max-width: 70%;
+}
+#chat {
+	/*font-family: "Arial Rounded MT Bold";*/
+	display: block;
+	position: absolute;
+	top: 70%;
+	left: 50%;
+	padding: 10px 20px;
+	background: rgba(255,255,255,.1);
+	-webkit-border-radius: 20px;
+	color: #fff;
+	text-align: center;
+	border-style:none;
+	outline-style:none;
+	height:30px;
+	opacity:0;
+	-webkit-transition: opacity .2s linear;
+}
