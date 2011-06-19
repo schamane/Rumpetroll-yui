@@ -5,7 +5,8 @@ var TS = Y.TS,
     Tadpole = engine.Tadpole,
     WaterParticle = engine.WaterParticle,
     Camera = engine.Camera,
-    Message = engine.Message;
+    Message = engine.Message,
+    Arrow = engine.Arrow;
 
 var Model = function() {
 	this.tadpoles = [];
@@ -131,12 +132,7 @@ Model.prototype._update = function() {
 		//this.waterParticles[i].fire('update', outerBounds);
 		this.waterParticles[i]._update(outerBounds);
 	}
-	
-	// Update arrows
-	//cameraBounds = camera.getBounds();
-	for(i in this.arrows) {
-		this.arrows[i].update();
-	}
+
 };
 
 Model.prototype._draw = function() {
@@ -160,12 +156,8 @@ Model.prototype._draw = function() {
 	}
 	
 	// Start UI layer (reset transform matrix)
-	this.camera.startUILayer();
+	//this.camera.startUILayer();
 	
-	// Draw arrows
-	for(i in this.arrows) {
-		this.arrows[i].draw();
-	}
 };
 
 Model.prototype._getMouseWorldPosition = function() {
@@ -238,11 +230,11 @@ Model.prototype._onUpdate = function(data) {
 	if(!this.tadpoles[id]) {
 		Y.log("create: "+ id +" !!!", "info");
 		newtp = new Tadpole({ context: context });
+		newtp.plug(Arrow, {
+			camera: this.camera, context: context, canvas: this.get('canvas')
+		});
 		this.tadpoles[id] = newtp;
-		this.arrows[id] = new Arrow({tadpole: newtp, camera: this.camera, context: context, canvas: this.get('canvas') });
-		//subscribe cam change
-		this.camera.on('positionChanged', this.arrows[id]._onCamUpdate, this.arrows[id] );
-		Y.log("create new tadpole", "info");
+		Y.log("create arrow for " + id);
 	}
 	
 	var tadpole = this.tadpoles[id];
@@ -266,6 +258,7 @@ Model.prototype._onUpdate = function(data) {
 	tadpole.set('momentum', data.momentum);
 	
 	tadpole.set('timeSinceLastServerUpdate', 0);
+	tadpole.fire('move', data.x, data.y);
 };
 
 Model.prototype._onMessage = function(data) {

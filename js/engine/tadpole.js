@@ -37,6 +37,7 @@ Tadpole.ATTRS = {
 };
 
 Y.extend( Tadpole, Y.Base );
+Y.mix(Tadpole, Y.Plugin.Host, false, null, 1);
 Y.Plugin.Host.plug( Tadpole, TadpoleTail, { length: 15 } );
 
 Tadpole.prototype.update = function(mouse) {
@@ -146,7 +147,7 @@ Tadpole.prototype.draw = function() {
 	var opacity = Math.max(Math.min(20 / Math.max(this.get('timeSinceLastServerUpdate')-300,1),1),.2).toFixed(3),
 	    context = this.get('context'),
 	    angle = this.get('angle');
-
+	
 	if(this.get('hover') && this.isAuthorized()) {
 		context.fillStyle = 'rgba(192, 253, 247,'+opacity+')';
 		// context.shadowColor   = 'rgba(249, 136, 119, '+opacity*0.7+')';
@@ -161,12 +162,12 @@ Tadpole.prototype.draw = function() {
 	
 	// Draw circle
 	context.beginPath();
-	context.arc(this.x, this.y, this.get('size'), angle + Pi * 2.7, angle + Pi * 1.3, true); 
-	
-	this.fire('tailDraw');
+	context.arc(this.x, this.y, this.get('size'), angle + Pi * 2.7, angle + Pi * 1.3, true);
 	
 	context.closePath();
 	context.fill();
+	
+	this.fire('tailDraw');
 	
 	context.shadowBlur = 0;
 	context.shadowColor   = '';

@@ -23,10 +23,11 @@ var TadpoleTail = function() {
 
 TadpoleTail.NS = "tail";
 TadpoleTail.NAME = "ts-engine-tadpole-tail";
+TadpoleTail.BODY_SPACE = 2;
 TadpoleTail.ATTRS = {
 	joints: { value: [] },
 	length: { value: 15 },
-	spacing: { value: 1.4 },
+	spacing: { value: 1.6 },
 	animationRate: { value: 0 }
 };
 
@@ -80,8 +81,8 @@ TadpoleTail.prototype.update = function() {
 		tJPi = tJangle + Pi;
 		
 		if(i == 0) {
-			tailJoint.x = x + Math.cos(tJPi) * 5;
-			tailJoint.y = y + Math.sin(tJPi) * 5;
+			tailJoint.x = x + Math.cos(tJPi) * TadpoleTail.BODY_SPACE;
+			tailJoint.y = y + Math.sin(tJPi) * TadpoleTail.BODY_SPACE;
 		} else {
 			tailJoint.x = x + Math.cos(tJPi) * jointSpacing;
 			tailJoint.y = y + Math.sin(tJPi) * jointSpacing;
@@ -93,12 +94,15 @@ TadpoleTail.prototype.update = function() {
 TadpoleTail.prototype.draw = function() {
 	var path = [[],[]],
 	    host = this.get('host'),
+	    hostAngle = host.get('angle'),
 	    size = host.get('size'),
 	    context = host.get('context'),
 	    i, length = this.get('length'),
 	    joints = this.get('joints'),
 	    angle, x, y,
-	    tailJoint, falloff, jointSize, x1, x2, y1, y2;
+	    tailJoint, falloff, 
+	    jointSize = size-0.8,
+	    x1, x2, y1, y2;
 	
 	for(i = 0; i < length; i++) {
 		tailJoint = joints[i];
@@ -107,7 +111,9 @@ TadpoleTail.prototype.draw = function() {
 		y = tailJoint.y;
 		
 		falloff = (length - i) / length;
-		jointSize =  (size - 1.8) * falloff;
+		if(i > 0){
+			jointSize =  (size-1.8) * falloff;
+		}
 		
 		x1 = x + Math.cos(angle + Pi * 1.5) * jointSize;
 		y1 = y + Math.sin(angle + Pi * 1.5) * jointSize;
@@ -119,13 +125,18 @@ TadpoleTail.prototype.draw = function() {
 		path[1].push({x: x2, y: y2});
 	}
 	
-	for(i = 0; i < length; i++) {
+	context.beginPath();
+	context.moveTo(path[0][0].x, path[0][0].y);
+	
+	for(i = 1; i < length; i++) {
 		context.lineTo(path[0][i].x, path[0][i].y);
 	}
 	path[1].reverse();
 	for(i = 0; i < length; i++) {
 		context.lineTo(path[1][i].x, path[1][i].y);
 	}
+	context.closePath();
+	context.fill();
 };
 
 Y.namespace('TS.engine').TadpoleTail = TadpoleTail;

@@ -4,75 +4,73 @@ var Pi = Math.PI,
     Pi12 = Pi / 2;
 
 var Arrow = function() {
+	Y.log("arrow constructor");
 	Arrow.superclass.constructor.apply(this, arguments);
-	var canvas = this.get('canvas');
-	this.x = 0;
-	this.y = 0;
-	
-	this.tadpole = this.get('tadpole');
-	this.camera = this.get('camera');
-	
-	this.angle = 0;
-	this.distance = 10;
-	
-	this.cW = canvas._node.width/2;
-	this.cH = canvas._node.height/2;
-	
-	this.camX = this.camera.x;
-	this.camY = this.camera.y;
-	this.tadPoleX = this.tadpole.x;
-	this.tadPoleY = this.tadpole.y;
 };
 
 Arrow.NAME = "ts-engine-arrow";
+Arrow.NS = "arrow";
 Arrow.OPACITY = .8;
+Arrow.DISTANCE = 100;
+Arrow.PADDING = 10;
+Arrow.SIZE = 4;
 Arrow.ATTRS = {
-    tadpole: {},
     camera: {},
     context: {},
-    canvas: {}
+    canvas: {},
+    canvasNode: {}
 };
 
-Y.extend(Arrow, Y.Base);
+Y.extend(Arrow, Y.Plugin.Base);
 
 Arrow.prototype._onCamUpdate = function(e, x, y) {
-	this.camX = x;
-	this.camY = y;
-	this.angle = Math.atan2(this.tadPoleY - this.camY, this.tadPoleX - this.camX);
+	var tadpole = this.get('host');
+	this.angle = Math.atan2(tadpole.y - y, tadpole.x - x);
 };
 
 Arrow.prototype._onTadpoleMove = function(e, x, y) {
-	this.tadPoleX = x;
-	this.tadPoleY = y;
-	this.angle = Math.atan2(this.tadPoleY - this.camY, this.tadPoleX - this.camX);
+	var camera = this.get('camera');
+	this.angle = Math.atan2(y - camera.x, x - camera.x);
 };
 
-Arrow.prototype.update = function() {
-	//this.angle = Math.atan2(this.tadpole.y - this.camY, this.tadpole.x - this.camX);
+Arrow.prototype.initializer = function() {
+	var canvas = this.get('canvas');
+	this.set('canvasNode', canvas._node);
+	this.x = 0;
+	this.y = 0;
+	
+	this.angle = 0;
+	
+	//subscribe tadpole move
+	this.afterHostEvent('move', this._onTadpoleMove, this );
+	this.afterHostMethod('draw', this.draw, this);
+	this.get('camera').on('positionChanged', this._onCamUpdate, this );
 };
 
 Arrow.prototype.draw = function() {
-	var context = this.get('context'),
-	    cW = this.cW,
-	    cH = this.cH,
-	    cameraBounds = this.camera.getBounds(),
+	var tadpole = this.get('host'),
+		context = tadpole.get('context'),
+		canvasNode = this.get('canvasNode'),
+	    cW = canvasNode.width/2,
+	    cH = canvasNode.height/2,
+	    cameraBounds = this.get('camera').getBounds(),
 	    angle = this.angle,
-	    size = 4,
-	    arrowDistance = 100,
-	    tx = this.tadpole.x,
-	    ty = this.tadpole.y;
+	    size = Arrow.SIZE,
+	    arrowDistance = Arrow.DISTANCE,
+	    tx = tadpole.x,
+	    ty = tadpole.y;
 	
 	if( tx < cameraBounds[0].x ||
 		ty < cameraBounds[0].y ||
 		tx > cameraBounds[1].x ||
 		ty > cameraBounds[1].y ) {
 		
-		var w = cW - 10,
-		    h = cH - 10,
+		var w = cW - Arrow.PADDING,
+		    h = cH - Arrow.PADDING,
 		    aa = Math.atan(h / w),
 		    ss = Math.cos(angle),
 		    cc = Math.sin(angle);
-		if((Math.abs(angle) + aa) % Pi12 < aa) {
+		if((Math.abs(angle) + aa) % Pi / 2 < aa) {
 			arrowDistance = w / Math.abs(ss);
 		} else {
 			arrowDistance = h / Math.abs(cc);
@@ -80,11 +78,14 @@ Arrow.prototype.draw = function() {
 
 		var x = cW + ss * arrowDistance,
 		    y = cH + cc * arrowDistance,
-		    point = calcPoint(x, y, angle, 2, size),
-		    side1 = calcPoint(x, y, angle, 1.5, size),
-		    side2 = calcPoint(x, y, angle, 0.5, size);
+		    point = Arrow.calcPoint(x, y, angle, 2, size),
+		    side1 = Arrow.calcPoint(x, y, angle, 1.5, size),
+		    side2 = Arrow.calcPoint(x, y, angle, 0.5, size);
 
+		
 		// Draw arrow
+		context.save();
+		context.setTransform(1, 0, 0, 1, 0, 0);
 		context.fillStyle = 'rgba(155,55,255,'+Arrow.OPACITY+')';
 		context.beginPath();
 		context.moveTo(point.x, point.y);
@@ -92,10 +93,22 @@ Arrow.prototype.draw = function() {
 		context.lineTo(side2.x, side2.y)
 		context.closePath();
 		context.fill();
+		context.restore();
 	}
 };
 
-var calcPoint = function(x, y, angle, angleMultiplier, length) {
+/**
+ * Calculate point
+ * @static
+ * @method calcPoint
+ * @param {int} x
+ * @param {int} y
+ * @param {float} angle
+ * @param {int} angleMultiplier
+ * @param {int} length
+ * @returns {Object} with x and y as point
+ */
+Arrow.calcPoint = function(x, y, angle, angleMultiplier, length) {
 	var c  = angle + Pi * angleMultiplier;
 	return {
 		x: x + Math.cos( c ) * length,
@@ -105,4 +118,4 @@ var calcPoint = function(x, y, angle, angleMultiplier, length) {
 
 Y.namespace('TS.engine').Arrow = Arrow;
 
-}, '1.0', {requires: ['base']});
+}, '1.0', {requires: ['plugin']});
