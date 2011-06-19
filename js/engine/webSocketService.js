@@ -89,6 +89,8 @@ WebSocketService.prototype.sendUpdate = function(tadpole) {
 		sendObj['name'] = tadpole.get('name');
 	}
 	
+	tadpole.set('timeSinceLastServerUpdate', 0);
+	
 	this.webSocket.send(JSON.stringify(sendObj));
 };
 

@@ -134,10 +134,9 @@ Model.prototype._update = function() {
 	
 	// Update arrows
 	//cameraBounds = camera.getBounds();
-	/* for(i in this.arrows) {
+	for(i in this.arrows) {
 		this.arrows[i].update();
 	}
-	*/
 };
 
 Model.prototype._draw = function() {

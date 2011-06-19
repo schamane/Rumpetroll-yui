@@ -49,7 +49,7 @@ Tadpole.prototype.update = function(mouse) {
 	    momentum = this.get('momentum'),
 	    targetX = this.get('targetX'),
 	    targetY = this.get('targetY');
-	this.set('timeSinceLastServerUpdate', time++);
+	this.set('timeSinceLastServerUpdate', time + 1);
 	
 	x += Math.cos(angle) * momentum;
 	y += Math.sin(angle) * momentum;
@@ -137,9 +137,6 @@ Tadpole.prototype.userUpdate = function(angleTargetX, angleTargetY) {
 	
 	changed += Math.abs((prevState.angle - angle)*3) + momentum;
 	
-	if(changed > 1) {
-		this.set('timeSinceLastServerUpdate', 0);
-	}
 	this.set('angle', angle );
 	this.set('momentum', momentum );
 	this.set('changed', changed );
