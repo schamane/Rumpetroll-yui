@@ -42,7 +42,8 @@ TadpoleTail.prototype.initializer = function() {
 	Y.log("set joints", "info");
 	this.set('joints', joints);
 	this.afterHostMethod("update", this.update);
-	this.afterHostEvent("tailDraw", this.draw);
+	this.afterHostMethod("draw", this.draw);
+	//this.afterHostEvent("tailDraw", this.draw);
 	Y.log("set methods after host done", "info");
 };
 
@@ -94,6 +95,7 @@ TadpoleTail.prototype.update = function() {
 TadpoleTail.prototype.draw = function() {
 	var path = [[],[]],
 	    host = this.get('host'),
+	    opacity = host.opacity,
 	    hostAngle = host.get('angle'),
 	    size = host.get('size'),
 	    context = host.get('context'),
@@ -125,6 +127,13 @@ TadpoleTail.prototype.draw = function() {
 		path[1].push({x: x2, y: y2});
 	}
 	
+	context.save();
+	
+	context.shadowOffsetX = 0;
+	context.shadowOffsetY = 0;
+	context.shadowBlur    = 6;
+	context.shadowColor   = 'rgba(255, 255, 255, '+opacity*0.7+')';
+	
 	context.beginPath();
 	context.moveTo(path[0][0].x, path[0][0].y);
 	
@@ -137,6 +146,8 @@ TadpoleTail.prototype.draw = function() {
 	}
 	context.closePath();
 	context.fill();
+	
+	context.restore();
 };
 
 Y.namespace('TS.engine').TadpoleTail = TadpoleTail;

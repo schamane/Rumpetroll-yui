@@ -58,8 +58,6 @@ Model.prototype.initializer = function() {
 	//this.camera.x = this.userTadpole.x;
 	//this.camera.y = this.userTadpole.y;
 	
-	this.arrows = {};
-	
 	//this.on('tick', this._tick);
 	this.on('tickUpdate', this._update);
 	this.on('tickDraw', this._draw);

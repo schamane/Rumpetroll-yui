@@ -148,6 +148,10 @@ Tadpole.prototype.draw = function() {
 	    context = this.get('context'),
 	    angle = this.get('angle');
 	
+	this.opacity = opacity;
+	
+	context.save();
+	
 	if(this.get('hover') && this.isAuthorized()) {
 		context.fillStyle = 'rgba(192, 253, 247,'+opacity+')';
 		// context.shadowColor   = 'rgba(249, 136, 119, '+opacity*0.7+')';
@@ -165,12 +169,10 @@ Tadpole.prototype.draw = function() {
 	context.arc(this.x, this.y, this.get('size'), angle + Pi * 2.7, angle + Pi * 1.3, true);
 	
 	context.closePath();
+	
 	context.fill();
 	
-	this.fire('tailDraw');
-	
-	context.shadowBlur = 0;
-	context.shadowColor   = '';
+	context.restore();
 	
 	this.drawName();
 	this.drawMessages();
