@@ -26,7 +26,7 @@ Y.extend(Page, Y.Base);
  * @method initializer
  */
 Page.prototype.initializer = function() {
-	if(Modernizr.canvas) {
+	if(Modernizr && Modernizr.canvas) {
 	    this.app = new TS.engine.App({contentBox: Page.CANVAS_CONTENT_ID, socket: Page.APP_SOCKET});
 	    this.app.render();
 	    /*

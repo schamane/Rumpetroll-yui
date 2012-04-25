@@ -168,6 +168,8 @@ Tadpole.prototype.draw = function() {
 	context.beginPath();
 	context.arc(this.x, this.y, this.get('size'), angle + Pi * 2.7, angle + Pi * 1.3, true);
 	
+	this.fire("plugDraw");
+	
 	context.closePath();
 	
 	context.fill();
