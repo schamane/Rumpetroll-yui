@@ -2,7 +2,7 @@ Rumpetroll-yui
 
 Rumpetroll-yui is a port of the original Rumpetroll ( http://www.rumpetroll.com ) UI engine to the YUI framework.
 
-Should work fine with 3.4.0pr1 version of YUI.
+Should work fine with 3.5.0 version of YUI.
 
 
 Rumpetroll is a HTML5 massive-multiplayer experiment
